@@ -1,0 +1,5 @@
+data/
+stimuli/
+.~lock*
+*.swp
+__pycache__/
