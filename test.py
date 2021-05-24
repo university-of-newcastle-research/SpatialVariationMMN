@@ -40,13 +40,13 @@ lvc_counts = [263 if c == 'std' else 25 for c in classes]
 for idx, snd in enumerate(sound_set):
     if '67deg' in snd or '90deg' in snd:
         lvc_counts[idx] = 0
-snd_dicts = []
+hvc_list = []
 for idx, snd in enumerate(sounds):
-    snd_dicts.append({
+    hvc_list += hvc_counts[idx] * [{
         'stim_type': classes[idx],
         'sound': snd,
         'name': sound_set[idx].split('.')[0]
-    })
+    }]
 
 
 # Ensure that relative paths start from the same directory as this script
@@ -113,7 +113,7 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 test_block = data.TrialHandler(
     nReps=1, method='random',
     extraInfo=expInfo, originPath=-1,
-    trialList=snd_dicts,
+    trialList=hvc_list,
     seed=None, name='test_block')
 thisExp.addLoop(test_block)  # add the loop to the experiment
 thisTrial = test_block.trialList[0]  # so we can initialise stimuli with some values
