@@ -42,13 +42,12 @@ for idx, snd in enumerate(sound_set):
         lvc_counts[idx] = 0
 hvc_list = []
 for idx, snd in enumerate(sounds):
-    hvc_list.append({
+    hvc_list += hvc_counts[idx] * [{
         'stim_type': classes[idx],
         'sound': snd,
         'name': sound_set[idx].split('.')[0],
-        'weight': hvc_counts[idx]
         'code': idx
-    })
+    }]
 
 
 # Ensure that relative paths start from the same directory as this script
@@ -112,7 +111,7 @@ globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
 
 # set up handler to look after randomisation of conditions etc
-test_block = data.TrialHandlerExt(
+test_block = data.TrialHandler(
     nReps=1, method='random',
     extraInfo=expInfo, originPath=-1,
     trialList=hvc_list,
