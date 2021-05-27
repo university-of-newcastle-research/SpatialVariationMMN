@@ -28,6 +28,9 @@ from config import (sound_set, sound_files, classes, counts, __version__,
 # Important globals
 sounds = [sound.Sound(sound_files[s_idx], name=s)
           for s_idx, s in enumerate(sound_set)]
+port = parallel.ParallelPort(address=0x4FB8)
+
+
 
 
 def select_stimuli(types, count_tracker):
@@ -315,6 +318,7 @@ for block, adder in zip(blocks, code_adder):
                 sound.frameNStart = frameN  # exact frame index
                 sound.tStart = t  # local t and not account for scr refresh
                 sound.tStartRefresh = tThisFlipGlobal  # on global time
+                port.setData(code)
                 sound.play()  # start the sound (it finishes automatically)
             # *SOA* period
             if SOA.status == NOT_STARTED and t >= 0.0 - frameTolerance:
@@ -328,6 +332,8 @@ for block, adder in zip(blocks, code_adder):
                 SOA.complete()  # finish the static period
                 SOA.tStop = SOA.tStart + soa_time  # record stop time
 
+            if frameN == 2:
+                port.setData(0)
             # check for quit (typically the Esc key)
             if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
                 core.quit()
