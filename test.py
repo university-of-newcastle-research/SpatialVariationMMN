@@ -22,7 +22,8 @@ from random import shuffle, choice
 import os  # handy system and path functions
 
 # Import task specific details (sounds, counts etc)
-from config import sound_set, sound_files, classes, counts, __version__
+from config import (sound_set, sound_files, classes, counts, __version__,
+                    soa_time, rest_time)
 
 # Important globals
 sounds = [sound.Sound(sound_files[s_idx], name=s)
@@ -46,12 +47,12 @@ def get_snd_dict(snd_index):
     return {
         'stim_type': classes[snd_index],
         'sound': sounds[snd_index],
-        'name': sound_set[snd_index].split('.')[0],
-        'code': snd_index
+        'name': sound_set[snd_index].rpartition('.')[0],
+        'base_code': 1 if classes[snd_index] == 'std' else 2
     }
 
 
-def generate_sequence(sequence_type):
+def generate_sequence(sequence_type, block_code):
     """
     For a particular condition, generate a sequence of sounds that fulfills
     the requirements of the condition.
@@ -93,6 +94,17 @@ def generate_sequence(sequence_type):
             stimuli_list.append(get_snd_dict(idx))
         else:
             raise RuntimeError('Unexpected sequence value')
+
+    # Adjust special codes (InitStd, Std After Dev)
+    for idx, snd in enumerate(stimuli_list):
+        if idx < 3:
+            stimuli_list[idx].update({'code': 99})
+        elif stimuli_list[idx - 1]['stim_type'] == 'dev':
+            stimuli_list[idx].update({'code': 98})
+        else:
+            print(block_code, snd)
+            stimuli_list[idx].update({'code': block_code + snd['base_code']})
+
     return stimuli_list
 
 
@@ -107,7 +119,7 @@ def rest_break():
 
     # ------Prepare to start Routine "trial"-------
     continueRoutine = True
-    routineTimer.add(300.000000)
+    routineTimer.add(rest_time)
     # update component parameters for each repeat
     # keep track of which components have finished
     trialComponents = [rest]
@@ -236,10 +248,12 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 
 if expInfo['group'] == '1':
     blocks = ['hvc', 'lvc', 'break', 'lvc', 'hvc']
+    code_adder = [0, 2, 0, 12, 10]
 else:
     blocks = ['lvc', 'hvc', 'break', 'hvc', 'lvc']
+    code_adder = [4, 6, 0, 26, 24]
 
-for block in blocks:
+for block, adder in zip(blocks, code_adder):
     if block == 'break':
         rest_break()
         continue
@@ -247,7 +261,7 @@ for block in blocks:
     # set up handler to look after randomisation of conditions etc
     test_block = data.TrialHandler(
         nReps=1, method='sequential', extraInfo=expInfo, originPath=-1,
-        trialList=generate_sequence(block), seed=None, name=block + '_block'
+        trialList=generate_sequence(block, adder), seed=None, name=block + '_block'
     )
     thisExp.addLoop(test_block)  # add the loop to the experiment
     thisTrial = test_block.trialList[0]  # so we can initialise stimuli with some values
@@ -302,10 +316,10 @@ for block in blocks:
                 SOA.tStart = t  # local t and not account for scr refresh
                 SOA.tStartRefresh = tThisFlipGlobal  # on global time
                 win.timeOnFlip(SOA, 'tStartRefresh')  # time at next scr refresh
-                SOA.start(0.5)
+                SOA.start(soa_time)
             elif SOA.status == STARTED:  # one frame should pass before updating params and completing
                 SOA.complete()  # finish the static period
-                SOA.tStop = SOA.tStart + 0.5  # record stop time
+                SOA.tStop = SOA.tStart + soa_time  # record stop time
 
             # check for quit (typically the Esc key)
             if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):

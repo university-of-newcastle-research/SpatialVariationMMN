@@ -1,4 +1,4 @@
-__version__ = '0.0.3'
+__version__ = '0.0.5'
 sound_set = [
     'Central_100ms.wav', 'Central_50ms.wav', 'left_22.5deg_100ms.wav',
     'left_22.5deg_50ms.wav', 'left_45deg_100ms.wav', 'left_45deg_50ms.wav',
@@ -17,3 +17,6 @@ counts = {
 for idx, snd in enumerate(sound_set):
     if '67deg' in snd or '90deg' in snd:
         counts['lvc'][idx] = 0
+
+soa_time = 0.1
+rest_time = 1
