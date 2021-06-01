@@ -258,6 +258,12 @@ for block, adder in zip(blocks, code_adder):
         rest_break()
         continue
     # Otherwise we are in a stimulus delivery block
+    display = visual.TextStim(
+        win=win, name='block_display', text=block, font='Open Sans',
+        pos=(0, 0), height=0.1, wrapWidth=None, ori=0.0, color='white',
+        colorSpace='rgb', opacity=None, languageStyle='LTR', depth=0.0
+    )
+    display.setAutoDraw(True)
     # set up handler to look after randomisation of conditions etc
     test_block = data.TrialHandler(
         nReps=1, method='sequential', extraInfo=expInfo, originPath=-1,
@@ -298,6 +304,7 @@ for block, adder in zip(blocks, code_adder):
         while continueRoutine:
             # get current time
             t = trialClock.getTime()
+            gt = globalClock.getTime()
             tThisFlip = win.getFutureFlipTime(clock=trialClock)
             tThisFlipGlobal = win.getFutureFlipTime(clock=None)
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
@@ -347,9 +354,11 @@ for block, adder in zip(blocks, code_adder):
         test_block.addData('sound.stopped', sound.tStop)
         test_block.addData('SOA.started', SOA.tStart)
         test_block.addData('SOA.stopped', SOA.tStop)
+        test_block.addData('trial.started', gt)
 
         routineTimer.reset()
         thisExp.nextEntry()
+    display.setAutoDraw(False)
 
 
 # Flip one final time so any remaining win.callOnFlip()
