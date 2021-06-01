@@ -18,5 +18,5 @@ for idx, snd in enumerate(sound_set):
     if '67deg' in snd or '90deg' in snd:
         counts['lvc'][idx] = 0
 
-soa_time = 0.1
-rest_time = 1
+soa_time = 0.5
+rest_time = 300

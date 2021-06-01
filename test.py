@@ -105,7 +105,6 @@ def generate_sequence(sequence_type, block_code):
         elif stimuli_list[idx - 1]['stim_type'] == 'dev':
             stimuli_list[idx].update({'code': 98})
         else:
-            print(block_code, snd)
             stimuli_list[idx].update({'code': block_code + snd['base_code']})
 
     return stimuli_list
@@ -332,8 +331,6 @@ for block, adder in zip(blocks, code_adder):
                 SOA.complete()  # finish the static period
                 SOA.tStop = SOA.tStart + soa_time  # record stop time
 
-            if frameN == 2:
-                port.setData(0)
             # check for quit (typically the Esc key)
             if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
                 core.quit()
@@ -356,8 +353,8 @@ for block, adder in zip(blocks, code_adder):
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
         sound.stop()  # ensure sound has stopped at end of routine
+        port.setData(0) # Reset port to 0
         test_block.addData('sound.started', sound.tStart)
-        test_block.addData('sound.stopped', sound.tStop)
         test_block.addData('SOA.started', SOA.tStart)
         test_block.addData('SOA.stopped', SOA.tStop)
         test_block.addData('trial.started', gt)
