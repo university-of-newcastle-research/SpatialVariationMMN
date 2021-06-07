@@ -15,6 +15,8 @@ If you publish work using this script the most relevant publication is:
 
 from __future__ import absolute_import, division
 
+from psychopy import prefs
+prefs.hardware['audioLib'] = ['PTB']
 from psychopy import sound, gui, visual, core, data, logging, clock, parallel
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 from psychopy.hardware import keyboard
