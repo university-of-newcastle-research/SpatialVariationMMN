@@ -28,8 +28,9 @@ from config import (sound_set, sound_files, classes, counts, __version__,
                     soa_time, rest_time)
 
 # Important globals
-sounds = [sound.Sound(sound_files[s_idx], name=s)
+sounds = [sound.Sound(sound_files[s_idx], name=s, volume=0.05)
           for s_idx, s in enumerate(sound_set)]
+
 port = parallel.ParallelPort(address=0x4FB8)
 
 
@@ -245,6 +246,7 @@ defaultKeyboard = keyboard.Keyboard()
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
 SOA = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'], name='SOA')
+code_timer = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'], name='code_timer')
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
@@ -290,7 +292,7 @@ for block, adder in zip(blocks, code_adder):
         # ------Prepare to start Routine "trial"-------
         continueRoutine = True
         # keep track of which components have finished
-        trialComponents = [sound, SOA]
+        trialComponents = [sound, SOA, code_timer]
         for thisComponent in trialComponents:
             thisComponent.tStart = None
             thisComponent.tStop = None
@@ -328,10 +330,22 @@ for block, adder in zip(blocks, code_adder):
                 SOA.tStart = t  # local t and not account for scr refresh
                 SOA.tStartRefresh = tThisFlipGlobal  # on global time
                 win.timeOnFlip(SOA, 'tStartRefresh')  # time at next scr refresh
-                SOA.start(soa_time)
+                SOA.start(soa_time-0.1)
             elif SOA.status == STARTED:  # one frame should pass before updating params and completing
                 SOA.complete()  # finish the static period
                 SOA.tStop = SOA.tStart + soa_time  # record stop time
+                port.setData(0)
+            # *SOA* period
+            if code_timer.status == NOT_STARTED and t >= (soa_time - 0.1) - frameTolerance:
+                # keep track of start time/frame for later
+                code_timer.frameNStart = frameN  # exact frame index
+                code_timer.tStart = t  # local t and not account for scr refresh
+                code_timer.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(code_timer, 'tStartRefresh')  # time at next scr refresh
+                code_timer.start(0.1)
+            elif code_timer.status == STARTED:  # one frame should pass before updating params and completing
+                code_timer.complete()  # finish the static period
+                code_timer.tStop = code_timer.tStart + 0.1  # record stop time
 
             # check for quit (typically the Esc key)
             if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
@@ -355,7 +369,7 @@ for block, adder in zip(blocks, code_adder):
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
         sound.stop()  # ensure sound has stopped at end of routine
-        port.setData(0) # Reset port to 0
+        #port.setData(0) # Reset port to 0
         test_block.addData('sound.started', sound.tStart)
         test_block.addData('SOA.started', SOA.tStart)
         test_block.addData('SOA.stopped', SOA.tStop)
