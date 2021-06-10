@@ -19,4 +19,6 @@ for idx, snd in enumerate(sound_set):
         counts['lvc'][idx] = 0
 
 soa_time = 0.5
+code_length = 0.1
 rest_time = 300
+global_volume = 0.03
