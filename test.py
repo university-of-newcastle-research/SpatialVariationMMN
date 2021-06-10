@@ -268,6 +268,8 @@ for block, adder in zip(blocks, code_adder):
         colorSpace='rgb', opacity=None, languageStyle='LTR', depth=0.0
     )
     display.setAutoDraw(True)
+    # refresh the screen
+    win.flip()
     # set up handler to look after randomisation of conditions etc
     test_block = data.TrialHandler(
         nReps=1, method='sequential', extraInfo=expInfo, originPath=-1,
@@ -358,9 +360,7 @@ for block, adder in zip(blocks, code_adder):
                     continueRoutine = True
                     break  # at least one component has not yet finished
 
-            # refresh the screen
-            if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-                win.flip()
+
 
         # -------Ending Routine "trial"-------
         for thisComponent in trialComponents:

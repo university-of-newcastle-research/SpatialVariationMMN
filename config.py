@@ -1,4 +1,5 @@
-__version__ = '0.0.5'
+__version__ = '0.0.6'
+debug = True
 sound_set = [
     'Central_100ms.wav', 'Central_50ms.wav', 'left_22.5deg_100ms.wav',
     'left_22.5deg_50ms.wav', 'left_45deg_100ms.wav', 'left_45deg_50ms.wav',
@@ -13,12 +14,20 @@ counts = {
     'hvc': [145 if c == 'std' else 15 for c in classes],
     'lvc': [263 if c == 'std' else 25 for c in classes]
 }
+if debug:
+    counts = {
+        'hvc': [10 if c == 'std' else 1 for c in classes],
+        'lvc': [20 if c == 'std' else 2 for c in classes]
+    }
+
 # Fix low variance condition counts (remove 67 and 90 degree sounds entirely)
 for idx, snd in enumerate(sound_set):
     if '67deg' in snd or '90deg' in snd:
         counts['lvc'][idx] = 0
 
-soa_time = 0.5
+soa_time = 0.2
 code_length = 0.1
 rest_time = 300
+if debug:
+    rest_time = 3
 global_volume = 0.02
