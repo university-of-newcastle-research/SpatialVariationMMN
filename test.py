@@ -371,6 +371,7 @@ for block, adder in zip(blocks, code_adder):
         test_block.addData('SOA.started', SOA.tStart)
         test_block.addData('SOA.stopped', SOA.tStop)
         test_block.addData('trial.started', gt)
+        test_block.addData('block.name', block)
 
         routineTimer.reset()
         thisExp.nextEntry()
