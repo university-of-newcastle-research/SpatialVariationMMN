@@ -21,4 +21,4 @@ for idx, snd in enumerate(sound_set):
 soa_time = 0.5
 code_length = 0.1
 rest_time = 300
-global_volume = 0.03
+global_volume = 0.02
