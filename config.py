@@ -1,5 +1,5 @@
 __version__ = '0.0.6'
-debug = True
+debug = False
 sound_set = [
     'Central_100ms.wav', 'Central_50ms.wav', 'left_22.5deg_100ms.wav',
     'left_22.5deg_50ms.wav', 'left_45deg_100ms.wav', 'left_45deg_50ms.wav',
@@ -12,7 +12,7 @@ sound_files = ['stimuli/' + s for s in sound_set]
 classes = ['std' if '50ms' in s else 'dev' for s in sound_set]
 counts = {
     'hvc': [145 if c == 'std' else 15 for c in classes],
-    'lvc': [263 if c == 'std' else 25 for c in classes]
+    'lvc': [261 if c == 'std' else 27 for c in classes]
 }
 if debug:
     counts = {
@@ -25,7 +25,9 @@ for idx, snd in enumerate(sound_set):
     if '67deg' in snd or '90deg' in snd:
         counts['lvc'][idx] = 0
 
-soa_time = 0.2
+soa_time = 0.5
+if debug:
+    soa_time = 0.2
 code_length = 0.1
 rest_time = 300
 if debug:

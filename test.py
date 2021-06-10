@@ -316,7 +316,7 @@ for block, adder in zip(blocks, code_adder):
             frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
             # update/draw components on each frame
             # start/stop sound
-            if sound.status == NOT_STARTED and t >= 0.0 - frameTolerance:
+            if sound.status == NOT_STARTED and t >= 0.0:
                 # keep track of start time/frame for later
                 sound.frameNStart = frameN  # exact frame index
                 sound.tStart = t  # local t and not account for scr refresh
@@ -324,7 +324,7 @@ for block, adder in zip(blocks, code_adder):
                 port.setData(code)
                 sound.play()  # start the sound (it finishes automatically)
             # *SOA* period
-            if SOA.status == NOT_STARTED and t >= 0.0 - frameTolerance:
+            if SOA.status == NOT_STARTED and t >= 0.0:
                 # keep track of start time/frame for later
                 SOA.frameNStart = frameN  # exact frame index
                 SOA.tStart = t  # local t and not account for scr refresh
@@ -336,7 +336,7 @@ for block, adder in zip(blocks, code_adder):
                 SOA.tStop = SOA.tStart + soa_time  # record stop time
                 port.setData(0)
             # *SOA* period
-            if code_timer.status == NOT_STARTED and t >= (soa_time - code_length) - frameTolerance:
+            if code_timer.status == NOT_STARTED and t >= (soa_time - code_length):
                 # keep track of start time/frame for later
                 code_timer.frameNStart = frameN  # exact frame index
                 code_timer.tStart = t  # local t and not account for scr refresh
