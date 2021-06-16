@@ -126,6 +126,7 @@ def rest_break():
         pos=(0, 0), height=0.1, wrapWidth=None, ori=0.0, color='white',
         colorSpace='rgb', opacity=None, languageStyle='LTR', depth=0.0
     )
+    txt = '5 minutes rest break\n{} seconds remaining'
 
     # ------Prepare to start Routine "trial"-------
     continueRoutine = True
@@ -145,6 +146,7 @@ def rest_break():
     _timeToFirstFrame = win.getFutureFlipTime(clock="now")
     trialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
     frameN = -1
+    n_secs = 1
 
     # -------Run Routine "trial"-------
     while continueRoutine and routineTimer.getTime() > 0:
@@ -165,7 +167,10 @@ def rest_break():
             rest.setAutoDraw(True)
         if rest.status == STARTED:
             # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > rest.tStartRefresh + 300.0 - frameTolerance:
+            if tThisFlipGlobal > rest.tStartRefresh + n_secs - frameTolerance:
+                rest.text = txt.format(rest_time - n_secs)
+                n_secs += 1
+            if tThisFlipGlobal > rest.tStartRefresh + rest_time - frameTolerance:
                 # keep track of stop time/frame for later
                 rest.tStop = t  # not accounting for scr refresh
                 rest.frameNStop = frameN  # exact frame index
