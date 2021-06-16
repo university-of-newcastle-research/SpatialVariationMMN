@@ -16,7 +16,7 @@ If you publish work using this script the most relevant publication is:
 from __future__ import absolute_import, division
 
 from psychopy import prefs
-prefs.hardware['audioLib'] = ['PTB']
+prefs.hardware['audioLib'] = ['PTB', 'pyo', 'pygame']
 from psychopy import sound, gui, visual, core, data, logging, clock, parallel
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 from psychopy.hardware import keyboard
@@ -25,13 +25,20 @@ import os  # handy system and path functions
 
 # Import task specific details (sounds, counts etc)
 from config import (sound_set, sound_files, classes, counts, __version__,
-                    soa_time, rest_time, code_length, global_volume)
+                    soa_time, rest_time, code_length, global_volume,
+                    no_parallel)
 
 # Important globals
 sounds = [sound.Sound(sound_files[s_idx], name=s, volume=global_volume)
           for s_idx, s in enumerate(sound_set)]
 
-port = parallel.ParallelPort(address=0x4FB8)
+if no_parallel:
+    class PPort():
+        def setData(self, code):
+            print(f'Sent {code: >3} to parallel port')
+    port = PPort()
+else:
+    port = parallel.ParallelPort(address=0x4FB8)
 
 
 def select_stimuli(types, count_tracker):
