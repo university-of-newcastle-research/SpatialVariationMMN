@@ -57,7 +57,7 @@ def get_snd_dict(snd_index):
     """
     return {
         'stim_type': classes[snd_index],
-        'sound': sounds[snd_index],
+        'sound': snd_index,
         'name': sound_set[snd_index].rpartition('.')[0],
         'base_code': 1 if classes[snd_index] == 'std' else 2
     }
@@ -304,6 +304,7 @@ for block, adder in zip(blocks, code_adder):
         # ------Prepare to start Routine "trial"-------
         continueRoutine = True
         # keep track of which components have finished
+        sound = sounds[sound]
         trialComponents = [sound, SOA, code_timer]
         for thisComponent in trialComponents:
             thisComponent.tStart = None

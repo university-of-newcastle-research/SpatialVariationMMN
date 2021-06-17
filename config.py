@@ -17,8 +17,8 @@ counts = {
 }
 if debug:
     counts = {
-        'hvc': [10 if c == 'std' else 1 for c in classes],
-        'lvc': [20 if c == 'std' else 2 for c in classes]
+        'hvc': [5 if c == 'std' else 1 for c in classes],
+        'lvc': [5 if c == 'std' else 1 for c in classes]
     }
 
 # Fix low variance condition counts (remove 67 and 90 degree sounds entirely)
