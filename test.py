@@ -255,8 +255,6 @@ defaultKeyboard = keyboard.Keyboard()
 
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
-SOA = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'], name='SOA')
-code_timer = clock.StaticPeriod(win=win, screenHz=expInfo['frameRate'], name='code_timer')
 
 # Create some handy timers
 globalClock = core.Clock()  # to track the time since experiment started
@@ -302,10 +300,10 @@ for block, adder in zip(blocks, code_adder):
                 exec('{} = thisTrial[paramName]'.format(paramName))
 
         # ------Prepare to start Routine "trial"-------
-        continueRoutine = True
+        routineTimer.add(soa_time)
         # keep track of which components have finished
         sound = sounds[sound]
-        trialComponents = [sound, SOA, code_timer]
+        trialComponents = [sound]
         for thisComponent in trialComponents:
             thisComponent.tStart = None
             thisComponent.tStop = None
@@ -318,9 +316,10 @@ for block, adder in zip(blocks, code_adder):
         _timeToFirstFrame = win.getFutureFlipTime(clock="now")
         trialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
         frameN = -1
+        sendingCode = False
 
         # -------Run Routine "trial"-------
-        while continueRoutine:
+        while routineTimer.getTime() > 0:
             # get current time
             t = trialClock.getTime()
             gt = globalClock.getTime()
@@ -336,43 +335,14 @@ for block, adder in zip(blocks, code_adder):
                 sound.tStartRefresh = tThisFlipGlobal  # on global time
                 port.setData(code)
                 sound.play()  # start the sound (it finishes automatically)
-            # *SOA* period
-            if SOA.status == NOT_STARTED and t >= 0.0:
-                # keep track of start time/frame for later
-                SOA.frameNStart = frameN  # exact frame index
-                SOA.tStart = t  # local t and not account for scr refresh
-                SOA.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(SOA, 'tStartRefresh')  # time at next scr refresh
-                SOA.start(soa_time - code_length)
-            elif SOA.status == STARTED:  # one frame should pass before updating params and completing
-                SOA.complete()  # finish the static period
-                SOA.tStop = SOA.tStart + soa_time  # record stop time
+                sendingCode = True
+            if sendingCode and  t >= code_length:
                 port.setData(0)
-            # *SOA* period
-            if code_timer.status == NOT_STARTED and t >= (soa_time - code_length):
-                # keep track of start time/frame for later
-                code_timer.frameNStart = frameN  # exact frame index
-                code_timer.tStart = t  # local t and not account for scr refresh
-                code_timer.tStartRefresh = tThisFlipGlobal  # on global time
-                win.timeOnFlip(code_timer, 'tStartRefresh')  # time at next scr refresh
-                code_timer.start(code_length)
-            elif code_timer.status == STARTED:  # one frame should pass before updating params and completing
-                code_timer.complete()  # finish the static period
-                code_timer.tStop = code_timer.tStart + code_length  # record stop time
+                sendingCode = False
 
             # check for quit (typically the Esc key)
             if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
                 core.quit()
-
-            # check if all components have finished
-            if not continueRoutine:  # a component has requested a forced-end of Routine
-                break
-            continueRoutine = False  # will revert to True if at least one component still running
-            for thisComponent in trialComponents:
-                if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-                    continueRoutine = True
-                    break  # at least one component has not yet finished
-
 
 
         # -------Ending Routine "trial"-------
@@ -381,13 +351,10 @@ for block, adder in zip(blocks, code_adder):
                 thisComponent.setAutoDraw(False)
         sound.stop()  # ensure sound has stopped at end of routine
         test_block.addData('sound.started', sound.tStart)
-        test_block.addData('SOA.started', SOA.tStart)
-        test_block.addData('SOA.stopped', SOA.tStop)
         test_block.addData('trial.started', gt)
         test_block.addData('block.name', block)
         test_block.addData('port.code', code)
 
-        routineTimer.reset()
         thisExp.nextEntry()
     display.setAutoDraw(False)
 

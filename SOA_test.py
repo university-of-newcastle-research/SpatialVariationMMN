@@ -9,4 +9,8 @@ df = pd.read_csv(fn)
 diffs = df['trial.started'].diff()
 diffs = diffs[diffs != diffs.max()]
 plt.hist(diffs)
+plt.ticklabel_format(style='plain', useOffset=False)
+plt.show()
+plt.plot(diffs)
+plt.ticklabel_format(style='plain', useOffset=False)
 plt.show()
