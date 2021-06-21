@@ -1,6 +1,6 @@
 __version__ = '0.0.7'
 debug = False
-no_parallel = True
+no_parallel = False
 sound_set = [
     'Central_100ms.wav', 'Central_50ms.wav', 'left_22.5deg_100ms.wav',
     'left_22.5deg_50ms.wav', 'left_45deg_100ms.wav', 'left_45deg_50ms.wav',
