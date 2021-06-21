@@ -3,3 +3,7 @@ stimuli/
 .~lock*
 *.swp
 __pycache__/
+InpOutBinaries_1501/
+inpout32.h
+inpoutx64.dll
+inpoutx64.lib
