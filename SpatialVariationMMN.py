@@ -32,6 +32,7 @@ from config import (sound_set, sound_files, classes, counts, __version__,
 sounds = [sound.Sound(sound_files[s_idx], name=s, volume=global_volume)
           for s_idx, s in enumerate(sound_set)]
 
+
 if no_parallel:
     class PPort():
         def setData(self, code):
@@ -39,7 +40,10 @@ if no_parallel:
     port = PPort()
 else:
     port = parallel.ParallelPort(address=0x4FB8)
-
+# Play one sound to init sound card, set port to 0 to stop mnissing code
+sounds[0].play()
+port.setData(0)
+print(sounds[0])
 
 def select_stimuli(types, count_tracker):
     """Select a stimulus match the type from the provided array
