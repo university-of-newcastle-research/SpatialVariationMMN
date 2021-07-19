@@ -16,7 +16,6 @@ If you publish work using this script the most relevant publication is:
 from __future__ import absolute_import, division
 
 from psychopy import prefs
-prefs.hardware['audioLib'] = ['PTB', 'pyo', 'pygame']
 from psychopy import sound, gui, visual, core, data, logging, clock, parallel
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 from psychopy.hardware import keyboard
@@ -28,7 +27,7 @@ from config import (sound_set, sound_files, classes, counts, __version__,
                     soa_time, rest_time, code_length, global_volume,
                     no_parallel)
 
-# Important globals
+global_volume = 0.5
 sounds = [sound.Sound(sound_files[s_idx], name=s, volume=global_volume)
           for s_idx, s in enumerate(sound_set)]
 
@@ -72,7 +71,7 @@ def generate_sequence(sequence_type, block_code):
     For a particular condition, generate a sequence of sounds that fulfills
     the requirements of the condition.
 
-    :returns: A list of dictionaries, each element of the list represents a
+    : A list of dictionaries, each element of the list represents a
     trial in the final block.
 
     """
@@ -112,12 +111,7 @@ def generate_sequence(sequence_type, block_code):
 
     # Adjust special codes (InitStd, Std After Dev)
     for idx, snd in enumerate(stimuli_list):
-        if idx < 3:
-            stimuli_list[idx].update({'code': 99})
-        elif stimuli_list[idx - 1]['stim_type'] == 'dev':
-            stimuli_list[idx].update({'code': 98})
-        else:
-            stimuli_list[idx].update({'code': block_code + snd['base_code']})
+        stimuli_list[idx].update({'code': 1})
 
     return stimuli_list
 
