@@ -315,22 +315,21 @@ for block, adder in zip(blocks, code_adder):
                 thisComponent.status = NOT_STARTED
         # reset timers
         sendingCode = False
-        routineTimer.add(soa_time)
+        routineTimer.reset(soa_time)
 
         # -------Run Routine "trial"-------
         while routineTimer.getTime() > 0:
             # get current time
             t = trialClock.getTime()
-            now = ptb.GetSecs()
             # update/draw components on each frame
             # start/stop sound
-            if sound.status == NOT_STARTED and t >= 0.0:
+            if sound.status == NOT_STARTED:
                 # keep track of start time/frame for later
-                sound.tStart = now  # local t and not account for scr refresh
+                sound.tStart = t  # local t and not account for scr refresh
                 port.setData(code)
-                sound.play(when=now)  # start the sound (it finishes automatically)
+                sound.play()  # start the sound (it finishes automatically)
                 sendingCode = True
-            if sendingCode and t >= code_length:
+            if sendingCode and routineTimer.getTime() < (soa_time - code_length):
                 port.setData(0)
                 sendingCode = False
 
