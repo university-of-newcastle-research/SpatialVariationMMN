@@ -15,6 +15,7 @@ If you publish work using this script the most relevant publication is:
 
 from __future__ import absolute_import, division
 
+import psychtoolbox as ptb
 from psychopy import prefs
 prefs.hardware['audioLib'] = ['PTB', 'pyo', 'pygame']
 from psychopy import sound, gui, visual, core, data, logging, clock, parallel
@@ -132,7 +133,7 @@ def rest_break():
     )
     txt = '5 minutes rest break\n{} seconds remaining'
 
-    # ------Prepare to start Routine "trial"-------
+    # ------Prepare to start Routine "rest"-------
     continueRoutine = True
     routineTimer.add(rest_time)
     # update component parameters for each repeat
@@ -152,7 +153,7 @@ def rest_break():
     frameN = -1
     n_secs = 1
 
-    # -------Run Routine "trial"-------
+    # -------Run Routine "rest"-------
     while continueRoutine and routineTimer.getTime() > 0:
         # get current time
         t = trialClock.getTime()
@@ -198,7 +199,7 @@ def rest_break():
         if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
             win.flip()
 
-    # -------Ending Routine "trial"-------
+    # -------Ending Routine "rest"-------
     for thisComponent in trialComponents:
         if hasattr(thisComponent, "setAutoDraw"):
             thisComponent.setAutoDraw(False)
@@ -305,22 +306,14 @@ for block, adder in zip(blocks, code_adder):
 
         # ------Prepare to start Routine "trial"-------
         t = trialClock.getTime()
-        gt = globalClock.getTime()
         # keep track of which components have finished
         sound = sounds[sound]
         trialComponents = [sound]
         for thisComponent in trialComponents:
             thisComponent.tStart = None
-            thisComponent.tStop = None
-            thisComponent.tStartRefresh = None
-            thisComponent.tStopRefresh = None
             if hasattr(thisComponent, 'status'):
                 thisComponent.status = NOT_STARTED
         # reset timers
-        t = 0
-        _timeToFirstFrame = win.getFutureFlipTime(clock="now")
-        trialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
-        frameN = -1
         sendingCode = False
         routineTimer.add(soa_time)
 
@@ -328,21 +321,16 @@ for block, adder in zip(blocks, code_adder):
         while routineTimer.getTime() > 0:
             # get current time
             t = trialClock.getTime()
-            gt = globalClock.getTime()
-            tThisFlip = win.getFutureFlipTime(clock=trialClock)
-            tThisFlipGlobal = win.getFutureFlipTime(clock=None)
-            frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
+            now = ptb.GetSecs()
             # update/draw components on each frame
             # start/stop sound
             if sound.status == NOT_STARTED and t >= 0.0:
                 # keep track of start time/frame for later
-                sound.frameNStart = frameN  # exact frame index
-                sound.tStart = t  # local t and not account for scr refresh
-                sound.tStartRefresh = tThisFlipGlobal  # on global time
+                sound.tStart = now  # local t and not account for scr refresh
                 port.setData(code)
-                sound.play()  # start the sound (it finishes automatically)
+                sound.play(when=now)  # start the sound (it finishes automatically)
                 sendingCode = True
-            if sendingCode and  t >= code_length:
+            if sendingCode and t >= code_length:
                 port.setData(0)
                 sendingCode = False
 
@@ -357,7 +345,7 @@ for block, adder in zip(blocks, code_adder):
                 thisComponent.setAutoDraw(False)
         sound.stop()  # ensure sound has stopped at end of routine
         test_block.addData('sound.started', sound.tStart)
-        test_block.addData('trial.started', gt)
+        test_block.addData('trial.started', t)
         test_block.addData('block.name', block)
         test_block.addData('port.code', code)
 
