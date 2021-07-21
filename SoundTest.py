@@ -33,7 +33,7 @@ global_volume = 0.5
 sounds = [sound.Sound(sound_files[s_idx], name=s, volume=global_volume)
           for s_idx, s in enumerate(sound_set)]
 
-print(sound.audioLib, sound.audioDriver)
+print(sound.audioLib, sound.audioDriver, sound.backend, sound.deviceNames)
 
 
 if no_parallel:
