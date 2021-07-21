@@ -33,6 +33,8 @@ global_volume = 0.5
 sounds = [sound.Sound(sound_files[s_idx], name=s, volume=global_volume)
           for s_idx, s in enumerate(sound_set)]
 
+print(sound.audioLib, sound.audioDriver)
+
 
 if no_parallel:
     class PPort():
@@ -68,7 +70,7 @@ def get_snd_dict(snd_index):
     }
 
 
-def generate_sequence(sequence_type, block_code):
+def generate_sequence():
     """
     For a particular condition, generate a sequence of sounds that fulfills
     the requirements of the condition.
@@ -79,6 +81,8 @@ def generate_sequence(sequence_type, block_code):
     """
     # A sequence is 1 std, followed by a random shuffled array of stds and ssd,
     # where ssd represents three trials - std, std, dev.
+    # Could use either hvc or lvc here
+    sequence_type = 'hvc'
     length = sum(counts[sequence_type])  # Total length of block
     num_devs = sum(c for i, c in enumerate(counts[sequence_type])
                    if classes[i] == 'dev')
@@ -111,95 +115,11 @@ def generate_sequence(sequence_type, block_code):
         else:
             raise RuntimeError('Unexpected sequence value')
 
-    # Adjust special codes (InitStd, Std After Dev)
+    # All codes are 1 as we are just testing sound timing
     for idx, snd in enumerate(stimuli_list):
         stimuli_list[idx].update({'code': 1})
 
-    return stimuli_list
-
-
-def rest_break():
-    """Rest for five minutes and return
-    """
-    rest = visual.TextStim(
-        win=win, name='rest', text='5 minutes rest break', font='Open Sans',
-        pos=(0, 0), height=0.1, wrapWidth=None, ori=0.0, color='white',
-        colorSpace='rgb', opacity=None, languageStyle='LTR', depth=0.0
-    )
-    txt = '5 minutes rest break\n{} seconds remaining'
-
-    # ------Prepare to start Routine "rest"-------
-    continueRoutine = True
-    routineTimer.add(rest_time)
-    # update component parameters for each repeat
-    # keep track of which components have finished
-    trialComponents = [rest]
-    for thisComponent in trialComponents:
-        thisComponent.tStart = None
-        thisComponent.tStop = None
-        thisComponent.tStartRefresh = None
-        thisComponent.tStopRefresh = None
-        if hasattr(thisComponent, 'status'):
-            thisComponent.status = NOT_STARTED
-    # reset timers
-    t = 0
-    _timeToFirstFrame = win.getFutureFlipTime(clock="now")
-    trialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
-    frameN = -1
-    n_secs = 1
-
-    # -------Run Routine "rest"-------
-    while continueRoutine and routineTimer.getTime() > 0:
-        # get current time
-        t = trialClock.getTime()
-        tThisFlip = win.getFutureFlipTime(clock=trialClock)
-        tThisFlipGlobal = win.getFutureFlipTime(clock=None)
-        frameN = frameN + 1  # number of completed frames (so 0 is the first frame)
-        # update/draw components on each frame
-
-        # *rest* updates
-        if rest.status == NOT_STARTED and tThisFlip >= 0.0 - frameTolerance:
-            # keep track of start time/frame for later
-            rest.frameNStart = frameN  # exact frame index
-            rest.tStart = t  # local t and not account for scr refresh
-            rest.tStartRefresh = tThisFlipGlobal  # on global time
-            win.timeOnFlip(rest, 'tStartRefresh')  # time at next scr refresh
-            rest.setAutoDraw(True)
-        if rest.status == STARTED:
-            # is it time to stop? (based on global clock, using actual start)
-            if tThisFlipGlobal > rest.tStartRefresh + n_secs - frameTolerance:
-                rest.text = txt.format(rest_time - n_secs)
-                n_secs += 1
-            if tThisFlipGlobal > rest.tStartRefresh + rest_time - frameTolerance:
-                # keep track of stop time/frame for later
-                rest.tStop = t  # not accounting for scr refresh
-                rest.frameNStop = frameN  # exact frame index
-                win.timeOnFlip(rest, 'tStopRefresh')  # time at next scr refresh
-                rest.setAutoDraw(False)
-
-        # check for quit (typically the Esc key)
-        if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-            core.quit()
-
-        # check if all components have finished
-        if not continueRoutine:  # a component has requested a forced-end of Routine
-            break
-        continueRoutine = False  # will revert to True if at least one component still running
-        for thisComponent in trialComponents:
-            if hasattr(thisComponent, "status") and thisComponent.status != FINISHED:
-                continueRoutine = True
-                break  # at least one component has not yet finished
-
-        # refresh the screen
-        if continueRoutine:  # don't flip if this routine is over or we'll get a blank screen
-            win.flip()
-
-    # -------Ending Routine "rest"-------
-    for thisComponent in trialComponents:
-        if hasattr(thisComponent, "setAutoDraw"):
-            thisComponent.setAutoDraw(False)
-    thisExp.addData('rest.started', rest.tStartRefresh)
-    thisExp.addData('rest.stopped', rest.tStopRefresh)
+    return stimuli_list[:250]
 
 
 # Setup (taken from Psychopy generated code and adjusted slightly)
@@ -260,18 +180,10 @@ trialClock = core.Clock()
 globalClock = core.Clock()  # to track the time since experiment started
 routineTimer = core.CountdownTimer()  # to track time remaining of each (non-slip) routine
 
-if expInfo['group'] == '1':
-    blocks = ['hvc', 'lvc', 'break', 'lvc', 'hvc']
-    code_adder = [0, 2, 0, 12, 10]
-else:
-    blocks = ['lvc', 'hvc', 'break', 'hvc', 'lvc']
-    code_adder = [4, 6, 0, 26, 24]
+blocks = ['Sound Tester']
 
-for block, adder in zip(blocks, code_adder):
-    if block == 'break':
-        rest_break()
-        continue
-    # Otherwise we are in a stimulus delivery block
+for block in blocks:
+    # We are in a sound testing block
     display = visual.TextStim(
         win=win, name='block_display', text=block, font='Open Sans',
         pos=(0, 0), height=0.1, wrapWidth=None, ori=0.0, color='white',
@@ -283,7 +195,7 @@ for block, adder in zip(blocks, code_adder):
     # set up handler to look after randomisation of conditions etc
     test_block = data.TrialHandler(
         nReps=1, method='sequential', extraInfo=expInfo, originPath=-1,
-        trialList=generate_sequence(block, adder), seed=None, name=block + '_block'
+        trialList=generate_sequence(), seed=None, name=block + '_block'
     )
     thisExp.addLoop(test_block)  # add the loop to the experiment
     thisTrial = test_block.trialList[0]  # so we can initialise stimuli with some values
