@@ -12,6 +12,7 @@ for d = 1:size(durs,2)
         ss.Ramp_length_start = 5*10^-4;
         ss.Ramp_length_end = 5*10^-4;
         ss.Duration=durs(d)/1000;
+        ss.Sample_frequency=48000;
         ss.Frequency=freqs(f);
         component_specs{end+1} = ss;
     end
