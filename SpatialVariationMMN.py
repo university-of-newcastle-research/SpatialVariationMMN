@@ -88,8 +88,8 @@ def generate_sequence(sequence_type, block_code):
     sequence = ['std'] * num_stds + ['ssd'] * num_devs
     shuffle(sequence)
     tracker = counts[sequence_type].copy()
-    stds = [i for i, c in enumerate(classes) if c == 'std']
-    devs = [i for i, c in enumerate(classes) if c == 'dev']
+    stds = [i for i, c in enumerate(classes) if c == 'std' and tracker[i] > 0]
+    devs = [i for i, c in enumerate(classes) if c == 'dev' and tracker[i] > 0]
     stimuli_list = []
 
     # First standard
