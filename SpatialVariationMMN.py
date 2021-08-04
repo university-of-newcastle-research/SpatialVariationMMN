@@ -46,6 +46,7 @@ sounds[0].play()
 port.setData(0)
 print(sounds[0])
 
+
 def select_stimuli(types, count_tracker):
     """Select a stimulus match the type from the provided array
     :returns: a dict for the stimulus chosen
@@ -336,7 +337,6 @@ for block, adder in zip(blocks, code_adder):
             # check for quit (typically the Esc key)
             if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
                 core.quit()
-
 
         # -------Ending Routine "trial"-------
         for thisComponent in trialComponents:
