@@ -21,6 +21,7 @@ prefs.hardware['audioLib'] = ['PTB', 'pyo', 'pygame']
 from psychopy import sound, gui, visual, core, data, logging, clock, parallel
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 from psychopy.hardware import keyboard
+from psychopy import __version__ as psychopy_version
 from random import shuffle, choice
 import os  # handy system and path functions
 
@@ -30,7 +31,7 @@ from config import (sound_set, sound_files, classes, counts, __version__,
                     no_parallel)
 
 # Important globals
-sounds = [sound.Sound(sound_files[s_idx], name=s, volume=global_volume)
+sounds = [sound.Sound(sound_files[s_idx], name=s[0], volume=global_volume)
           for s_idx, s in enumerate(sound_set)]
 
 
@@ -64,8 +65,8 @@ def get_snd_dict(snd_index):
     return {
         'stim_type': classes[snd_index],
         'sound': snd_index,
-        'name': sound_set[snd_index].rpartition('.')[0],
-        'base_code': 1 if classes[snd_index] == 'std' else 2
+        'name': sound_set[snd_index][0].rpartition('.')[0],
+        'base_code': sound_set[snd_index][1]
     }
 
 
@@ -214,7 +215,6 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
 # Store info about the experiment session
-psychopyVersion = '2021.1.4'  # GC: Check this
 expName = 'Mattsen_Study3'
 expInfo = {'participant': '', 'group': '1'}
 dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
@@ -222,7 +222,8 @@ if not dlg.OK:
     core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
 expInfo['expName'] = expName
-expInfo['psychopyVersion'] = psychopyVersion
+expInfo['psychopyVersion'] = psychopy_version
+expInfo['taskVersion'] = __version__
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
@@ -268,10 +269,10 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 
 if expInfo['group'] == '1':
     blocks = ['hvc', 'lvc', 'break', 'lvc', 'hvc']
-    code_adder = [0, 2, 0, 12, 10]
+    code_adder = [0, 20, 0, 40, 60]
 else:
     blocks = ['lvc', 'hvc', 'break', 'hvc', 'lvc']
-    code_adder = [4, 6, 0, 26, 24]
+    code_adder = [100, 120, 0, 140, 160]
 
 for block, adder in zip(blocks, code_adder):
     if block == 'break':
