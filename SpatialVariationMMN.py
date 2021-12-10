@@ -28,7 +28,7 @@ import os  # handy system and path functions
 # Import task specific details (sounds, counts etc)
 from config import (sound_set, sound_files, classes, counts, __version__,
                     soa_time, rest_time, code_length, global_volume,
-                    no_parallel)
+                    no_parallel, wait_time)
 
 # Important globals
 sounds = [sound.Sound(sound_files[s_idx], name=s[0], volume=global_volume)
@@ -328,6 +328,7 @@ for block, adder in zip(blocks, code_adder):
         logging.exp(f'Sent {code} to port')
         ptb.WaitSecs('UntilTime', t + code_length)
         port.setData(0)
+        ptb.WaitSecs('UntilTime', t + wait_time)
         # check for quit (typically the Esc key)
         if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
             core.quit()

@@ -40,6 +40,7 @@ for idx, (snd, code) in enumerate(sound_set):
 
 soa_time = 0.5
 code_length = 0.005
+wait_time = 0.11
 rest_time = 300
 if debug:
     rest_time = 3
