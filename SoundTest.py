@@ -21,6 +21,7 @@ prefs.hardware['audioLib'] = ['PTB', 'pyo', 'pygame']
 from psychopy import sound, gui, visual, core, data, logging, clock, parallel
 from psychopy.constants import (NOT_STARTED, STARTED, FINISHED)
 from psychopy.hardware import keyboard
+from psychopy import __version__ as psychopy_version
 from random import shuffle, choice
 import os  # handy system and path functions
 
@@ -29,8 +30,8 @@ from config import (sound_set, sound_files, classes, counts, __version__,
                     soa_time, rest_time, code_length, global_volume,
                     no_parallel)
 
-global_volume = 0.5
-sounds = [sound.Sound(sound_files[s_idx], name=s, volume=global_volume)
+# Important globals
+sounds = [sound.Sound(sound_files[s_idx], name=s[0], volume=global_volume)
           for s_idx, s in enumerate(sound_set)]
 
 print(sound.audioLib, sound.audioDriver, sound.backend, sound.deviceNames)
@@ -47,6 +48,7 @@ else:
 sounds[0].play()
 port.setData(0)
 print(sounds[0])
+
 
 def select_stimuli(types, count_tracker):
     """Select a stimulus match the type from the provided array
@@ -65,8 +67,8 @@ def get_snd_dict(snd_index):
     return {
         'stim_type': classes[snd_index],
         'sound': snd_index,
-        'name': sound_set[snd_index].rpartition('.')[0],
-        'base_code': 1 if classes[snd_index] == 'std' else 2
+        'name': sound_set[snd_index][0].rpartition('.')[0],
+        'base_code': sound_set[snd_index][1]
     }
 
 
@@ -75,7 +77,7 @@ def generate_sequence():
     For a particular condition, generate a sequence of sounds that fulfills
     the requirements of the condition.
 
-    : A list of dictionaries, each element of the list represents a
+    :returns: A list of dictionaries, each element of the list represents a
     trial in the final block.
 
     """
@@ -92,8 +94,8 @@ def generate_sequence():
     sequence = ['std'] * num_stds + ['ssd'] * num_devs
     shuffle(sequence)
     tracker = counts[sequence_type].copy()
-    stds = [i for i, c in enumerate(classes) if c == 'std']
-    devs = [i for i, c in enumerate(classes) if c == 'dev']
+    stds = [i for i, c in enumerate(classes) if c == 'std' and tracker[i] > 0]
+    devs = [i for i, c in enumerate(classes) if c == 'dev' and tracker[i] > 0]
     stimuli_list = []
 
     # First standard
@@ -128,7 +130,6 @@ _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
 # Store info about the experiment session
-psychopyVersion = '2021.1.4'  # GC: Check this
 expName = 'Mattsen_Study3'
 expInfo = {'participant': '', 'group': '1'}
 dlg = gui.DlgFromDict(dictionary=expInfo, sortKeys=False, title=expName)
@@ -136,7 +137,8 @@ if not dlg.OK:
     core.quit()  # user pressed cancel
 expInfo['date'] = data.getDateStr()  # add a simple timestamp
 expInfo['expName'] = expName
-expInfo['psychopyVersion'] = psychopyVersion
+expInfo['psychopyVersion'] = psychopy_version
+expInfo['taskVersion'] = __version__
 
 # Data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
 filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
@@ -182,6 +184,8 @@ routineTimer = core.CountdownTimer()  # to track time remaining of each (non-sli
 
 blocks = ['Sound Tester']
 
+run_start = ptb.GetSecs()
+trial_counter = 1
 for block in blocks:
     # We are in a sound testing block
     display = visual.TextStim(
@@ -212,7 +216,7 @@ for block in blocks:
                 exec('{} = thisTrial[paramName]'.format(paramName))
 
         # ------Prepare to start Routine "trial"-------
-        t = trialClock.getTime()
+        trial_time = ptb.GetSecs()
         # keep track of which components have finished
         sound = sounds[sound]
         trialComponents = [sound]
@@ -220,42 +224,30 @@ for block in blocks:
             thisComponent.tStart = None
             if hasattr(thisComponent, 'status'):
                 thisComponent.status = NOT_STARTED
-        # reset timers
-        sendingCode = False
-        routineTimer.reset(soa_time)
-
-        # -------Run Routine "trial"-------
-        while routineTimer.getTime() > 0:
-            # get current time
-            t = trialClock.getTime()
-            # update/draw components on each frame
-            # start/stop sound
-            if sound.status == NOT_STARTED:
-                # keep track of start time/frame for later
-                sound.tStart = t  # local t and not account for scr refresh
-                port.setData(code)
-                sound.play()  # start the sound (it finishes automatically)
-                sendingCode = True
-            if sendingCode and routineTimer.getTime() < (soa_time - code_length):
-                port.setData(0)
-                sendingCode = False
-
-            # check for quit (typically the Esc key)
-            if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-                core.quit()
-
+        # Specify when the sound should play
+        t = run_start + soa_time * trial_counter
+        sound.play(when=t)
+        ptb.WaitSecs('UntilTime', t)
+        logging.exp('Played sound')
+        port.setData(code)
+        logging.exp(f'Sent {code} to port')
+        ptb.WaitSecs('UntilTime', t + code_length)
+        port.setData(0)
+        # check for quit (typically the Esc key)
+        if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+            core.quit()
 
         # -------Ending Routine "trial"-------
         for thisComponent in trialComponents:
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
-        sound.stop()  # ensure sound has stopped at end of routine
-        test_block.addData('sound.started', sound.tStart)
-        test_block.addData('trial.started', t)
+        test_block.addData('sound.started', t)
+        test_block.addData('trial.started', trial_time)
         test_block.addData('block.name', block)
         test_block.addData('port.code', code)
 
         thisExp.nextEntry()
+        trial_counter += 1
     display.setAutoDraw(False)
 
 
