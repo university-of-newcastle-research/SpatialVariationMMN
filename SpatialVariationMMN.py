@@ -274,9 +274,13 @@ else:
     blocks = ['lvc', 'hvc', 'break', 'hvc', 'lvc']
     code_adder = [100, 120, 0, 140, 160]
 
+run_start = ptb.GetSecs()
+trial_counter = 1
 for block, adder in zip(blocks, code_adder):
     if block == 'break':
         rest_break()
+        run_start = ptb.GetSecs()
+        trial_counter = 1
         continue
     # Otherwise we are in a stimulus delivery block
     display = visual.TextStim(
@@ -307,7 +311,7 @@ for block, adder in zip(blocks, code_adder):
                 exec('{} = thisTrial[paramName]'.format(paramName))
 
         # ------Prepare to start Routine "trial"-------
-        t = trialClock.getTime()
+        trial_time = ptb.GetSecs()
         # keep track of which components have finished
         sound = sounds[sound]
         trialComponents = [sound]
@@ -315,41 +319,30 @@ for block, adder in zip(blocks, code_adder):
             thisComponent.tStart = None
             if hasattr(thisComponent, 'status'):
                 thisComponent.status = NOT_STARTED
-        # reset timers
-        sendingCode = False
-        routineTimer.reset(soa_time)
-
-        # -------Run Routine "trial"-------
-        while routineTimer.getTime() > 0:
-            # get current time
-            t = trialClock.getTime()
-            # update/draw components on each frame
-            # start/stop sound
-            if sound.status == NOT_STARTED:
-                # keep track of start time/frame for later
-                sound.tStart = t  # local t and not account for scr refresh
-                port.setData(code)
-                sound.play()  # start the sound (it finishes automatically)
-                sendingCode = True
-            if sendingCode and routineTimer.getTime() < (soa_time - code_length):
-                port.setData(0)
-                sendingCode = False
-
-            # check for quit (typically the Esc key)
-            if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
-                core.quit()
+        # Specify when the sound should play
+        t = run_start + soa_time * trial_counter
+        sound.play(when=t)
+        ptb.WaitSecs('UntilTime', t)
+        logging.exp('Played sound')
+        port.setData(code)
+        logging.exp(f'Sent {code} to port')
+        ptb.WaitSecs('UntilTime', t + code_length)
+        port.setData(0)
+        # check for quit (typically the Esc key)
+        if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+            core.quit()
 
         # -------Ending Routine "trial"-------
         for thisComponent in trialComponents:
             if hasattr(thisComponent, "setAutoDraw"):
                 thisComponent.setAutoDraw(False)
-        sound.stop()  # ensure sound has stopped at end of routine
-        test_block.addData('sound.started', sound.tStart)
-        test_block.addData('trial.started', t)
+        test_block.addData('sound.started', t)
+        test_block.addData('trial.started', trial_time)
         test_block.addData('block.name', block)
         test_block.addData('port.code', code)
 
         thisExp.nextEntry()
+        trial_counter += 1
     display.setAutoDraw(False)
 
 
