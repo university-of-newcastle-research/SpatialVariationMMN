@@ -137,7 +137,7 @@ def rest_break():
 
     # ------Prepare to start Routine "rest"-------
     continueRoutine = True
-    routineTimer.add(rest_time)
+    routineTimer.reset(rest_time)
     # update component parameters for each repeat
     # keep track of which components have finished
     trialComponents = [rest]

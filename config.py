@@ -44,4 +44,5 @@ wait_time = 0.11
 rest_time = 300
 if debug:
     rest_time = 3
+    soa_time = 0.12
 global_volume = 0.02
