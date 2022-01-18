@@ -1,0 +1,10 @@
+library(tidyverse)
+df <- read_csv("newcodes.vmrk", skip=12, col_names=c("MkNum_Type", "Code", "position", "size", "channel"))
+df <- df %>% separate(Code, sep="\\s", into=c("tmp", "evt"), extra="merge") %>% mutate(evt = as.numeric(evt)) %>% separate(MkNum_Type, sep="=", into=c("MkNum", "EvtType")) %>% select(EvtType, evt, position)
+table(df$EvtType)
+df %>% filter(EvtType == "Stmulus") %>% count(evt)
+df %>% mutate(position_diff = position - lag(position)) %>% filter(position_diff == 0) %>% count
+df <- df %>% mutate(nxt = lead(EvtType)) %>% filter(EvtType == "Stimulus") %>% mutate(evt = if_else(EvtType == nxt, evt, 64+evt))
+df %>% ggplot(aes(x = as.numeric(row.names(df)), y=evt)) + geom_point()
+ggsave(filename="temp.png", dpi="screen")
+table(df$evt)
