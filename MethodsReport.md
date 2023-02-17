@@ -1,26 +1,23 @@
 ---
-jupytext:
-  formats: ipynb,md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.10.3
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
+jupyter:
+  jupytext:
+    formats: ipynb,md
+    text_representation:
+      extension: .md
+      format_name: markdown
+      format_version: '1.3'
+      jupytext_version: 1.14.4
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
-```{code-cell} ipython3
-:tags: [hide-cell]
-
+```python tags=["hide-cell"]
 from myst_nb import glue
 from config import __version__
 glue("version", __version__)
 ```
-
-+++
 
 # Report on SpatialVariation MMN
 
@@ -28,7 +25,6 @@ This is a report on the work performed for Mattsen Yeark and Juanita Todd for th
 
 Covered in this document are aspects of the stimulus generation and task programming.
 
-+++
 
 ## Stimulus Generation
 
@@ -59,7 +55,6 @@ In terms of the setting for these particular sounds the following lays out how t
 The sound generation script can be found in the main project directory under the filename: soundgen.m
 ```
 
-+++
 
 ## Stimulus Calibration
 
@@ -67,7 +62,6 @@ The stimuli were calibrated using a BRÜEL & KJÆR audiometer by adjusting the v
 
 The volume for the stimuli was calibrated to be 75dB
 
-+++
 
 ## Task Design
 
@@ -94,7 +88,6 @@ Participants are allocated into one of two groups with the following condition o
 * Group 1: HVC, LVC, 5 min break, LVC, HVC
 * Group 2: LVC, HVC, 5 min break, HVC, LVC
 
-+++
 
 ## Task programming
 
@@ -126,7 +119,6 @@ The main task file (`SpatialVariationMMN.py`) follows the following main structu
         * Send the port code
 * Finally save the data to the output file
 
-+++
 
 ## Final notes
 
@@ -135,7 +127,3 @@ If you wish to reference Psychopy in publications you will probably want to use 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019)
         PsychoPy2: Experiments in behavior made easy Behav Res 51: 195.
         https://doi.org/10.3758/s13428-018-01193-y
-
-```{code-cell} ipython3
-
-```
