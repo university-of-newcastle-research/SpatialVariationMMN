@@ -1,23 +1,4 @@
----
-jupyter:
-  jupytext:
-    formats: ipynb,md
-    text_representation:
-      extension: .md
-      format_name: markdown
-      format_version: '1.3'
-      jupytext_version: 1.14.4
-  kernelspec:
-    display_name: Python 3 (ipykernel)
-    language: python
-    name: python3
----
-
-```python tags=["hide-cell"]
-from myst_nb import glue
-from config import __version__
-glue("version", __version__)
-```
++++
 
 # Report on SpatialVariation MMN
 
@@ -25,6 +6,7 @@ This is a report on the work performed for Mattsen Yeark and Juanita Todd for th
 
 Covered in this document are aspects of the stimulus generation and task programming.
 
++++
 
 ## Stimulus Generation
 
@@ -55,6 +37,7 @@ In terms of the setting for these particular sounds the following lays out how t
 The sound generation script can be found in the main project directory under the filename: soundgen.m
 ```
 
++++
 
 ## Stimulus Calibration
 
@@ -62,6 +45,7 @@ The stimuli were calibrated using a BRÜEL & KJÆR audiometer by adjusting the v
 
 The volume for the stimuli was calibrated to be 75dB
 
++++
 
 ## Task Design
 
@@ -88,10 +72,11 @@ Participants are allocated into one of two groups with the following condition o
 * Group 1: HVC, LVC, 5 min break, LVC, HVC
 * Group 2: LVC, HVC, 5 min break, HVC, LVC
 
++++
 
 ## Task programming
 
-The task was programmed using the Psychopy API for stimulus presentation. The Psychopy version at the time of task development was 2021.1.4. The task is comprised of two python script files, the main task script `SpatialVariationMMN.py` and a script containing configurable elements (`config.py`) such as trial numbers, script version SOA and more. The current version of the script is {glue:}`version`
+The task was programmed using the Psychopy API for stimulus presentation. The Psychopy version at the time of task development was 2021.1.4. The task is comprised of two python script files, the main task script `SpatialVariationMMN.py` and a script containing configurable elements (`config.py`) such as trial numbers, script version SOA and more. The current version of the script is `0.1.1`
 
 The audio driver used by the study is the [psychtoolbox](http://psychtoolbox.org) driver subset for Python as recommended for audio by PsychoPy.
 
@@ -119,6 +104,7 @@ The main task file (`SpatialVariationMMN.py`) follows the following main structu
         * Send the port code
 * Finally save the data to the output file
 
++++
 
 ## Final notes
 
