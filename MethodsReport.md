@@ -1,12 +1,8 @@
-+++
-
 # Report on SpatialVariation MMN
 
 This is a report on the work performed for Mattsen Yeark and Juanita Todd for the Spatial Variation MMN task  in 2021.
 
 Covered in this document are aspects of the stimulus generation and task programming.
-
-+++
 
 ## Stimulus Generation
 
@@ -18,7 +14,7 @@ In terms of the setting for these particular sounds the following lays out how t
 
 #### All Sounds
 
-* The sample frequency was set to 48000, which matches the settings requried by the psychtoolbox driver in Psychopy (previous sounds were at 44100Hz and this seemed to cause the static in the sounds).
+* The sample frequency was set to 48000, which matches the settings required by the psychtoolbox driver in PsychoPy (previous sounds were at 44100Hz and this seemed to cause the static in the sounds).
 * All sounds included a linear ramp on and off to avoid "clicking" due to sudden changes in volume to the sound card. The length of this ramp was set to 0.0005 seconds (half a millisecond)
 * All sounds had a bitrate of 16 (16 bits per sample)
 * All sounds were scaled to have a maximum amplitude of 90%
@@ -37,15 +33,11 @@ In terms of the setting for these particular sounds the following lays out how t
 The sound generation script can be found in the main project directory under the filename: soundgen.m
 ```
 
-+++
-
 ## Stimulus Calibration
 
 The stimuli were calibrated using a BRÜEL & KJÆR audiometer by adjusting the volume of the sounds within the task (using a volume parameter for the sound stimulus creation code) and recording the audio level using the audiometer. The main volume control for the PC was set to 75% and should be checked before running the task as the output volume to the participant depends on this setting being stable.
 
 The volume for the stimuli was calibrated to be 75dB
-
-+++
 
 ## Task Design
 
@@ -57,7 +49,7 @@ The two conditions differed on the apparent locations of the sound stimuli
 
 #### LVC 
 
-The LVC was comprised of sounds played centrally (no time differnce between channels) and those with an apparent location of $22.5^{\circ}$ Left and $22.5^{\circ}$ Right. For each of the three locations there were 435 standards (50ms) and 45 deviants (100ms)
+The LVC was comprised of sounds played centrally (no time difference between channels) and those with an apparent location of $22.5^{\circ}$ Left and $22.5^{\circ}$ Right. For each of the three locations there were 435 standards (50ms) and 45 deviants (100ms)
 
 #### HVC
 
@@ -72,11 +64,9 @@ Participants are allocated into one of two groups with the following condition o
 * Group 1: HVC, LVC, 5 min break, LVC, HVC
 * Group 2: LVC, HVC, 5 min break, HVC, LVC
 
-+++
-
 ## Task programming
 
-The task was programmed using the Psychopy API for stimulus presentation. The Psychopy version at the time of task development was 2021.1.4. The task is comprised of two python script files, the main task script `SpatialVariationMMN.py` and a script containing configurable elements (`config.py`) such as trial numbers, script version SOA and more. The current version of the script is `0.1.1`
+The task was programmed using the PsychoPy API for stimulus presentation. The PsychoPy version at the time of task development was 2021.1.4. The task is comprised of two python script files, the main task script `SpatialVariationMMN.py` and a script containing configurable elements (`config.py`) such as trial numbers, script version SOA and more. The current version of the script is `0.1.1`
 
 The audio driver used by the study is the [psychtoolbox](http://psychtoolbox.org) driver subset for Python as recommended for audio by PsychoPy.
 
@@ -94,7 +84,7 @@ The main task file (`SpatialVariationMMN.py`) follows the following main structu
     * `rest_break` Presents a rest break with a count down of the seconds remaining.
 * Gather information about the participant and the environment
 * Create a handler for storing and saving data, and a logger for logging problems
-* Create a display window for presenting visual information, clocks for timing and a keyboard for quiting the task.
+* Create a display window for presenting visual information, clocks for timing and a keyboard for quitting the task.
 * Create the block structure for each group.
 * Loop through each block and:
     * If a rest block, run the rest_break function
@@ -104,11 +94,9 @@ The main task file (`SpatialVariationMMN.py`) follows the following main structu
         * Send the port code
 * Finally save the data to the output file
 
-+++
-
 ## Final notes
 
-If you wish to reference Psychopy in publications you will probably want to use the following article:
+If you wish to reference PsychoPy in publications you will probably want to use the following article:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019)
         PsychoPy2: Experiments in behavior made easy Behav Res 51: 195.

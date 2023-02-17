@@ -1,8 +1,8 @@
 # SpatialVariationMMN
 
-SpatialVariationMMN is a Psychopy script that implements an auditory mismatch negativity task.
+SpatialVariationMMN is a PsychoPy script that implements an auditory mismatch negativity task.
 
-A full description of the stimuli used and the experimental design and ode can be found in the [MethodsReport](MethodsReport.md) file.
+A full description of the stimuli used, the experimental design and code can be found in the [MethodsReport](MethodsReport.md) file.
 
 ## Requirements
 
