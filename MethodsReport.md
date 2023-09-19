@@ -1,3 +1,13 @@
+---
+title: Report on SpatialVariation MMN
+authors:
+  - name: Gavin Cooper
+exports:
+  - format: pdf
+    template: arxiv_nips
+---
+
+
 # Report on SpatialVariation MMN
 
 This is a report on the work performed for Mattsen Yeark and Juanita Todd for the Spatial Variation MMN task  in 2021.
